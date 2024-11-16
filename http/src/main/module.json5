@@ -1,0 +1,14 @@
+{
+  "module": {
+    "name": "http",
+    "type": "shared",
+    "description": "$string:shared_desc",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1",
+      "car"
+    ],
+    "deliveryWithInstall": true
+  }
+}

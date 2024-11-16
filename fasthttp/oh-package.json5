@@ -1,0 +1,15 @@
+{
+  "name": "@hlm/fasthttp",
+  "version": "1.0.0",
+  "description": "快速HTTP",
+  "main": "Index.ets",
+  "author": {
+    "name": "利民",
+    "email": "46453868@qq.com"
+  },
+  "homepage": "https://github.com/helimin19",
+  "repository": "https://github.com/helimin19/FastHttp",
+  "license": "ISC",
+  "obfuscated": true,
+  "dependencies": {}
+}
