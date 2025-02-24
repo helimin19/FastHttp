@@ -77,6 +77,7 @@ export class FastHttp {
    */
   requestResponse(request: HttpRequest, callback: (error: BusinessError<string>|undefined, response?: rcp.Response) => void): rcp.Session {
     const session: rcp.Session = this.createSession(request);
+    this.appendToSessionConfig(session, request);
     session.fetch(request.builder()).then((rep: rcp.Response) => {
       // 输出跟踪信息
       this.tracing(rep!.debugInfo);
@@ -258,35 +259,6 @@ export class FastHttp {
     return session;
   }
 
-  public upload<T>(request: HttpRequest, upload: rcp.MultipartForm, callback: (error: HttpException|undefined, entity?: T) => void): rcp.Session {
-    const session: rcp.Session = this.createSession(request);
-    this.appendToSessionConfig(session, request);
-    session.post(request.url, upload).then((rep: rcp.Response) => {
-      // 输出跟踪信息
-      this.tracing(rep!.debugInfo);
-      //  输出性能时间
-      this.performance(rep.timeInfo);
-
-      let decoder = util.TextDecoder.create('utf-8');
-      const contentType = rep!.headers['content-type'];
-      if (contentType?.toLowerCase().includes('application/json')) {
-        let json = decoder.decodeToString(new Uint8Array(rep!.body));
-        callback(undefined, JSON.parse(json));
-      } else {
-        let text = decoder.decodeToString(new Uint8Array(rep!.body));
-        callback(undefined, text as T);
-      }
-
-      callback(undefined);
-
-      session.close();
-    }).catch((err: BusinessError<string>) => {
-      callback(new HttpException(err.code, (err.data ? err.data : err.message), err.stack));
-      session.close();
-    });
-    return session;
-  }
-
   /**
    * 给Session追加配置
    * @param session Session
@@ -333,23 +305,23 @@ export class FastHttp {
    * @param debugInfo 调试信息
    */
   private tracing(debugInfo?: rcp.DebugInfo[]) {
-    const httpDebugListener = this.httpConfiguration.debugListener();
+    const httpDebugListener = this.httpConfiguration.tracingListener();
     if (httpDebugListener && debugInfo) {
       let decoder = util.TextDecoder.create('utf-8');
       debugInfo?.forEach(debugInfo => {
-        if (debugInfo.type === 'headerOut') {
+        if (debugInfo.type === 'headerOut' && httpDebugListener.onRequestHeader) {
           httpDebugListener.onRequestHeader(decoder.decodeWithStream(new Uint8Array(debugInfo.data)));
-        } else if (debugInfo.type === 'dataOut') {
+        } else if (debugInfo.type === 'dataOut' && httpDebugListener.onRequestBody) {
           httpDebugListener.onRequestBody(decoder.decodeWithStream(new Uint8Array(debugInfo.data)));
-        } else if (debugInfo.type === 'headerIn') {
+        } else if (debugInfo.type === 'headerIn' && httpDebugListener.onResponseHeader) {
           httpDebugListener.onResponseHeader(decoder.decodeWithStream(new Uint8Array(debugInfo.data)));
-        } else if (debugInfo.type === 'dataIn') {
+        } else if (debugInfo.type === 'dataIn' && httpDebugListener.onResponseBody) {
           httpDebugListener.onResponseBody(decoder.decodeWithStream(new Uint8Array(debugInfo.data)));
-        } else if (debugInfo.type === 'sslDataOut') {
+        } else if (debugInfo.type === 'sslDataOut' && httpDebugListener.onSslOut) {
           httpDebugListener.onSslOut(debugInfo.data);
-        } else if (debugInfo.type === 'sslDataIn') {
+        } else if (debugInfo.type === 'sslDataIn' && httpDebugListener.onSslIn) {
           httpDebugListener.onSslIn(debugInfo.data);
-        } else if (debugInfo.type === 'text') {
+        } else if (debugInfo.type === 'text' && httpDebugListener.onText) {
           httpDebugListener.onText(decoder.decodeWithStream(new Uint8Array(debugInfo.data)));
         }
       });

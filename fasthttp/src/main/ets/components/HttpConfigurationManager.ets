@@ -40,9 +40,7 @@ export class HttpConfigurationManager {
    * @returns HttpConfigurationManager
    */
   public register(configuration: HttpConfiguration): HttpConfigurationManager {
-    console.log("limin", "configurations", this.configurations.length)
     this.configurations.push(configuration);
-    console.log("limin", "configurations", this.configurations.length)
     return this;
   }
 

@@ -1,5 +1,5 @@
 import { rcp } from '@kit.RemoteCommunicationKit';
-import { HttpDebugListener } from './HttpDebugListener';
+import { HttpTracingListener } from './HttpTracingListener';
 import { HttpPerformanceListener } from './HttpPerformanceListener';
 import { HttpRequest } from './HttpRequest';
 
@@ -14,7 +14,7 @@ export interface HttpConfiguration  {
    * 调试监听
    * @returns HTTP调试监听
    */
-  debugListener(): HttpDebugListener | undefined;
+  tracingListener(): HttpTracingListener | undefined;
 
   /**
    * 性能监听

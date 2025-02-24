@@ -1,30 +1,16 @@
-import { AntPathRequestMatcher, HttpConfiguration, HttpDebugListener,
-  HttpPerformanceListener,
+import {
+  AbstractHttpConfiguration,
+  AntPathRequestMatcher, HttpTracingListener,
   HttpRequest } from 'httpProxy';
 import { rcp } from '@kit.RemoteCommunicationKit';
 
-export class EntryHttpConfiguration implements HttpConfiguration {
+export class EntryHttpConfiguration extends AbstractHttpConfiguration {
 
-  private _sessionConfiguration: rcp.SessionConfiguration = {
-    baseAddress: "https://developer.huawei.com",
-    requestConfiguration: {
-      tracing: {
-        verbose: true,
-        infoToCollect: {
-          incomingHeader:true,
-          incomingData: true,
-          outgoingHeader: true,
-          outgoingData: true
-        }
-      }
-    }
-  };
-
-  sessionConfiguration(): rcp.SessionConfiguration {
-    return this._sessionConfiguration;
+  getBaseAddress(): rcp.URLOrString {
+    return "https://developer.huawei.com";
   }
 
-  debugListener(): HttpDebugListener {
+  tracingListener(): HttpTracingListener {
     return {
       onRequestHeader(context: string) {
         console.log("limin", "requestHeader", context);
@@ -47,11 +33,7 @@ export class EntryHttpConfiguration implements HttpConfiguration {
       onText(context: string) {
         console.log("limin", "text", context);
       }
-    } as HttpDebugListener;
-  }
-
-  performanceListener(): HttpPerformanceListener | undefined {
-    return undefined;
+    } as HttpTracingListener;
   }
 
   matches(request: HttpRequest): boolean {

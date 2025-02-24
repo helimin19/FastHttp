@@ -6,24 +6,6 @@ import {FastHttp, GET, Header } from 'httpProxy';
 import { notificationManager } from '@kit.NotificationKit';
 
 
-export abstract class UserApi {
-
-  public userName: string;
-
-  constructor() {
-    this.userName = "李太白";
-  }
-
-  @GET("http://www.baidu.com")
-  getData(@Header name: string, age: number): Array<Object> {
-    const items = new Array<string>();
-    items.push("abc");
-    items.push("edf");
-    return items;
-  }
-
-}
-
 
 @Entry
 @Component
@@ -54,6 +36,11 @@ struct Index {
               })
             })
 
+          Button("装饰器请求")
+            .width("100%").margin({ top: 16 })
+            .onClick(() => {
+              router.pushUrl({url: "pages/HttpDecorator"})
+            })
 
           Button("Http Demo")
             .width("100%").margin({ top: 16 })

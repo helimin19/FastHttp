@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     context.request.headers["token"] = "认证token";
 
-console.log("limin-99", context.session.configuration?.baseAddress, "" + this.request?.jsonRequest.url);
+    console.log("limin-99", context.session.configuration?.baseAddress, "" + this.request?.jsonRequest.url);
     return next.handle(context);
   }
 

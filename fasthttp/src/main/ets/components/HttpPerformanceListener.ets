@@ -5,5 +5,5 @@ import { rcp } from "@kit.RemoteCommunicationKit";
  */
 export interface HttpPerformanceListener {
   // 输出性能
-  onPerformance: (timeInfo: rcp.TimeInfo) => void;
+  onPerformance?: (timeInfo: rcp.TimeInfo) => void;
 }

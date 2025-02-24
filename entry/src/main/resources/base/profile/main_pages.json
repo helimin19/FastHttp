@@ -4,6 +4,7 @@
     "pages/AdoWebview",
     "pages/HttpDemo",
     "pages/DownloadDemo",
-    "pages/UploadDemo"
+    "pages/UploadDemo",
+    "pages/HttpDecorator"
   ]
 }

@@ -72,7 +72,7 @@ struct HttpDemo {
   }
 
   private requestMap() {
-    this.http.request<Map<string, object>>(new HttpRequest("http://192.168.100.66:8080/auth/login/username")).then((result: Map<string, object>) => {
+    this.http.request<Map<string, object>>(new HttpRequest("http://192.168.100.2:8080/auth/login/username")).then((result: Map<string, object>) => {
       promptAction.showToast({message: JSON.stringify(result)});
       console.log("limin", "Result", result);
     }).catch((err: BusinessError) => {
@@ -81,7 +81,7 @@ struct HttpDemo {
   }
 
   private requestResultEntity() {
-    const json = `{"method":"GET","url":"http://192.168.100.66:8080/auth/login/username","headers":{"token":"11","content-type":"application/json"},"body":{"name": "李太白", "age": 100}, "configuration":{"tracing":{"verbose":true, "infoToCollect": {"incomingHeader":true, "outgoingHeader":true, "incomingData": true, "outgoingData": true, "textual": true, "incomingSslData": true, "outgoingSslData": true}, "collectTimeInfo": true}}}`;
+    const json = `{"method":"GET","url":"http://192.168.100.2:8080/auth/login/username","headers":{"token":"11","content-type":"application/json"},"body":{"name": "李太白", "age": 100}, "configuration":{"tracing":{"verbose":true, "infoToCollect": {"incomingHeader":true, "outgoingHeader":true, "incomingData": true, "outgoingData": true, "textual": true, "incomingSslData": true, "outgoingSslData": true}, "collectTimeInfo": true}}}`;
 
     this.http.request<Ticket>(new HttpRequest(json)).then((result: Ticket) => {
       promptAction.showToast({message: JSON.stringify(result)});
@@ -92,7 +92,7 @@ struct HttpDemo {
 
   private requestResultString() {
     const request: HttpRequest = new HttpRequest();
-    request.setUrl("http://192.168.100.66:8080/auth/login")
+    request.setUrl("http://192.168.100.2:8080/auth/login")
       .addHeader("token", "11")
       .addHeader("content-type", "application/json")
       .setBody("{name: '杜小甫', age: 100}")

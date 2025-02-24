@@ -1,10 +1,8 @@
 import { fileIo, fileUri, picker } from '@kit.CoreFileKit';
 import { promptAction } from '@kit.ArkUI';
 import { common } from '@kit.AbilityKit';
-import { FastHttp, HttpException, HttpRequest } from 'httpProxy';
+import { FastHttp, HttpException, HttpRequest, HttpMethod } from 'httpProxy';
 import { rcp } from '@kit.RemoteCommunicationKit';
-import { BusinessError } from '@kit.BasicServicesKit';
-import { webview } from '@kit.ArkWeb';
 
 @Entry
 @Component
@@ -37,9 +35,18 @@ struct UploadDemo {
           contentOrPath: fileInfo.path
         }
       });
-      this.http.upload<Result<FileInfo>>(new HttpRequest("/auth/upload"), form, (error: HttpException|undefined, result?: Result<FileInfo>) => {
+      const request: HttpRequest = new HttpRequest();
+      request.setUrl("/auth/upload");
+      request.setMethod(HttpMethod.POST);
+      request.setBody(form);
+      this.http.request<Result<FileInfo>>(request).then((result: Result<FileInfo>) => {
         promptAction.showToast({message: JSON.stringify(result), duration: 50000});
-      });
+      }).catch((err: Error) => {
+        promptAction.showToast({message: JSON.stringify(err), duration: 50000});
+      })
+      // this.http.upload<Result<FileInfo>>(new HttpRequest("/auth/upload"), form, (error: HttpException|undefined, result?: Result<FileInfo>) => {
+      //   promptAction.showToast({message: JSON.stringify(result), duration: 50000});
+      // });
     })
   }
 
